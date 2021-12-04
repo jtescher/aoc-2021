@@ -1,8 +1,8 @@
 pub fn part_one(input: &str) -> anyhow::Result<usize> {
     let measurements = input
-        .split_terminator('\n')
+        .lines()
         .map(|line| Ok(line.parse()?))
-        .collect::<anyhow::Result<Vec<usize>>>()?;
+        .collect::<anyhow::Result<Vec<u32>>>()?;
 
     let count = measurements.windows(2).filter(|x| x[1] > x[0]).count();
 
@@ -11,21 +11,11 @@ pub fn part_one(input: &str) -> anyhow::Result<usize> {
 
 pub fn part_two(input: &str) -> anyhow::Result<usize> {
     let measurements = input
-        .split_terminator('\n')
+        .lines()
         .map(|line| Ok(line.parse()?))
-        .collect::<anyhow::Result<Vec<usize>>>()?;
+        .collect::<anyhow::Result<Vec<u32>>>()?;
 
-    let count = measurements
-        .windows(3)
-        .fold((0, usize::MAX), |(acc, prev), x| {
-            let sum = x.iter().sum();
-            if sum > prev {
-                (acc + 1, sum)
-            } else {
-                (acc, sum)
-            }
-        })
-        .0;
+    let count = measurements.windows(4).filter(|x| x[0] < x[3]).count();
 
     Ok(count)
 }
@@ -48,12 +38,12 @@ mod tests {
     #[test]
     fn part_one_works() {
         assert_eq!(7, part_one(TEST_INPUT).unwrap());
-        assert_eq!(1292, part_one(include_str!("./part_one.txt")).unwrap());
+        assert_eq!(1292, part_one(include_str!("./input_1.txt")).unwrap());
     }
 
     #[test]
     fn part_two_works() {
         assert_eq!(5, part_two(TEST_INPUT).unwrap());
-        assert_eq!(1262, part_two(include_str!("./part_two.txt")).unwrap());
+        assert_eq!(1262, part_two(include_str!("./input_2.txt")).unwrap());
     }
 }

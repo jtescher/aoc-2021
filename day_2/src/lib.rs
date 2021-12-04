@@ -1,38 +1,34 @@
-pub fn part_one(input: &str) -> anyhow::Result<isize> {
-    let (horiz, depth) =
-        input
-            .split_terminator('\n')
-            .try_fold((0, 0), |(horiz, depth), line| {
-                if let Some(forward) = line.strip_prefix("forward ") {
-                    Ok((horiz + forward.parse::<isize>()?, depth))
-                } else if let Some(up) = line.strip_prefix("up ") {
-                    Ok((horiz, depth - up.parse::<isize>()?))
-                } else if let Some(down) = line.strip_prefix("down ") {
-                    Ok((horiz, depth + down.parse::<isize>()?))
-                } else {
-                    anyhow::bail!("expected a direction, got {}", line)
-                }
-            })?;
+pub fn part_one(input: &str) -> anyhow::Result<i32> {
+    let (horiz, depth) = input.lines().try_fold((0, 0), |(horiz, depth), line| {
+        if let Some(forward) = line.strip_prefix("forward ") {
+            Ok((horiz + forward.parse::<i32>()?, depth))
+        } else if let Some(up) = line.strip_prefix("up ") {
+            Ok((horiz, depth - up.parse::<i32>()?))
+        } else if let Some(down) = line.strip_prefix("down ") {
+            Ok((horiz, depth + down.parse::<i32>()?))
+        } else {
+            anyhow::bail!("expected a direction, got {}", line)
+        }
+    })?;
 
     Ok(horiz * depth)
 }
 
-pub fn part_two(input: &str) -> anyhow::Result<isize> {
-    let (horiz, depth, _aim) =
-        input
-            .split_terminator('\n')
-            .try_fold((0, 0, 0), |(horiz, depth, aim), line| {
-                if let Some(forward) = line.strip_prefix("forward ") {
-                    let x = forward.parse::<isize>()?;
-                    Ok((horiz + x, depth + (x * aim), aim))
-                } else if let Some(up) = line.strip_prefix("up ") {
-                    Ok((horiz, depth, aim - up.parse::<isize>()?))
-                } else if let Some(down) = line.strip_prefix("down ") {
-                    Ok((horiz, depth, aim + down.parse::<isize>()?))
-                } else {
-                    anyhow::bail!("expected a direction, got {}", line)
-                }
-            })?;
+pub fn part_two(input: &str) -> anyhow::Result<i32> {
+    let (horiz, depth, _aim) = input
+        .lines()
+        .try_fold((0, 0, 0), |(horiz, depth, aim), line| {
+            if let Some(forward) = line.strip_prefix("forward ") {
+                let x = forward.parse::<i32>()?;
+                Ok((horiz + x, depth + (x * aim), aim))
+            } else if let Some(up) = line.strip_prefix("up ") {
+                Ok((horiz, depth, aim - up.parse::<i32>()?))
+            } else if let Some(down) = line.strip_prefix("down ") {
+                Ok((horiz, depth, aim + down.parse::<i32>()?))
+            } else {
+                anyhow::bail!("expected a direction, got {}", line)
+            }
+        })?;
 
     Ok(horiz * depth)
 }
